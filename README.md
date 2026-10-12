@@ -47,3 +47,7 @@ npm run preview    # serve the production build locally
 - It projects wages; it does **not** compute tax owed. <!-- TODO: confirm that is the intended scope -->
 - No automated tests.
 - <!-- TODO: any assumptions you want to state (e.g. tax year, which pay types are covered) -->
+
+## License
+
+MIT. See [LICENSE](LICENSE).
