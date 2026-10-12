@@ -8,7 +8,7 @@ Single-page app that projects your **federal taxable wages for the year** from t
 
 ## Why it exists
 
-<!-- TODO: in your own words, why you built it (e.g. checking withholding mid-year?) -->
+A payslip shows only the current pay period and the year-to-date totals, which makes it hard to see what your federal taxable wages will add up to by the end of the year. This page projects the year from the latest pay period and the year-to-date amounts, and exports the workings as an Excel file with live formulas so the numbers can be adjusted.
 
 ## What it does
 
@@ -44,9 +44,8 @@ npm run preview    # serve the production build locally
 
 ## Limitations
 
-- It projects wages; it does **not** compute tax owed. <!-- TODO: confirm that is the intended scope -->
+- It projects wages; it does **not** compute tax owed.
 - No automated tests.
-- <!-- TODO: any assumptions you want to state (e.g. tax year, which pay types are covered) -->
 
 ## License
 
