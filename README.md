@@ -4,7 +4,7 @@ Single-page app that projects your **federal taxable wages for the year** from t
 
 **Live site:** https://bsav0016.github.io/Tax-Projection/
 
-<!-- TODO: add a screenshot of the app (and ideally of the exported spreadsheet) -->
+![Tax Projection app](docs/screenshots/app.png)
 
 ## Why it exists
 
