@@ -23,13 +23,14 @@ Everything runs in the browser. There is no backend and no account; your entries
 
 - React 18, TypeScript, Vite 5
 - [ExcelJS](https://github.com/exceljs/exceljs) for the workbook export
-- GitHub Pages, deployed by a GitHub Actions workflow on every push to `main`
+- GitHub Pages, deployed by a GitHub Actions workflow on every push to `main`; pull requests run tests and a build first (`ci.yml`)
 
 ## Running it
 
 ```bash
 npm install
 npm run dev        # local dev server
+npm test           # unit tests (Vitest)
 npm run build      # type-check, then production build into dist/
 npm run preview    # serve the production build locally
 ```
@@ -45,7 +46,7 @@ npm run preview    # serve the production build locally
 ## Limitations
 
 - It projects wages; it does **not** compute tax owed.
-- No automated tests.
+- Automated tests cover the pay-period counting only. The projection arithmetic and the Excel export are not tested.
 
 ## License
 
