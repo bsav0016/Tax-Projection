@@ -46,7 +46,7 @@ npm run preview    # serve the production build locally
 ## Limitations
 
 - It projects wages; it does **not** compute tax owed.
-- Automated tests cover the pay-period counting only. The projection arithmetic and the Excel export are not tested.
+- Automated tests cover the pay-period counting and the projection arithmetic (`src/projection.ts`). The Excel export, the form and `localStorage` handling are not tested, so the formulas written into the workbook are not checked against the page's numbers.
 
 ## License
 

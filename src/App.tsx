@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FREQUENCIES, remainingPayPeriods, type Frequency } from './payPeriods'
 import { downloadExcel } from './exportExcel'
+import { parseAmount as num, periodsToProject, projectLine, subtractTotals, sumLines, type Totals } from './projection'
 
 type Line = { id: number; desc: string; period: string; ytd: string }
 type Expense = Line & { fed: boolean }
@@ -14,8 +15,6 @@ type State = {
   deductions: Line[]
   expenses: Expense[]
 }
-type Totals = { period: number; ytd: number; proj: number }
-
 const STORAGE_KEY = 'tax-projection-v1'
 const DEFAULT_DEDUCTIONS = ['Federal', 'Social Security', 'Medicare', 'State', 'Local']
 
@@ -47,18 +46,7 @@ function load(): State {
   return initialState()
 }
 
-const num = (s: string) => {
-  const n = parseFloat(s.replace(/,/g, ''))
-  return Number.isFinite(n) ? n : 0
-}
-
 const money = (n: number) => (Math.abs(n) < 0.005 ? 0 : n).toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-
-const sub = (a: Totals, b: Totals): Totals => ({
-  period: a.period - b.period,
-  ytd: a.ytd - b.ytd,
-  proj: a.proj - b.proj,
-})
 
 export default function App() {
   const [s, setS] = useState<State>(load)
@@ -73,22 +61,17 @@ export default function App() {
 
   const calculated = remainingPayPeriods(s.payDate, s.frequency)
   const overridden = s.periodsOverride.trim() !== ''
-  const remaining = overridden ? Math.floor(num(s.periodsOverride)) : calculated
+  const remaining = periodsToProject(s.periodsOverride, calculated)
 
-  // Projected = YTD + (current period * remaining pay periods)
-  const proj = (l: Line) => num(l.ytd) + num(l.period) * remaining
-
-  const sum = (items: Line[]): Totals =>
-    items.reduce(
-      (t, l) => ({ period: t.period + num(l.period), ytd: t.ytd + num(l.ytd), proj: t.proj + proj(l) }),
-      { period: 0, ytd: 0, proj: 0 },
-    )
+  // Projected = YTD + (current period * remaining pay periods); see projection.ts
+  const proj = (l: Line) => projectLine(l, remaining)
+  const sum = (items: Line[]) => sumLines(items, remaining)
 
   const gross = sum(s.income)
   const withheld = sum(s.deductions)
   const expenseTotal = sum(s.expenses)
   const fedExp = sum(s.expenses.filter((e) => e.fed))
-  const fedWages = sub(gross, fedExp)
+  const fedWages = subtractTotals(gross, fedExp)
 
   const patch = (p: Partial<State>) => setS((prev) => ({ ...prev, ...p }))
 
